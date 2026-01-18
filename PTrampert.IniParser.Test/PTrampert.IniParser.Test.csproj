@@ -20,4 +20,8 @@
         <Using Include="NUnit.Framework"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\PTrampert.IniParser\PTrampert.IniParser.csproj" />
+    </ItemGroup>
+
 </Project>
