@@ -18,14 +18,14 @@ public class IniReader(IniOptions options) : IIniReader
     /// <inheritdoc/>
     public async Task<IniFile> ReadAsync(string filePath, IniSection? rootSection = null)
     {
-        using var stream = File.OpenRead(filePath);
+        await using var stream = File.OpenRead(filePath);
         return await ReadAsync(stream, rootSection);
     }
     
     /// <inheritdoc/>
     public async Task<IniFile> ReadAsync(Stream stream, IniSection? rootSection = null)
     {
-        using var reader = new StreamReader(stream, leaveOpen: true);
+        var reader = new StreamReader(stream);
         return await ReadAsync(reader, rootSection);
     }
     
