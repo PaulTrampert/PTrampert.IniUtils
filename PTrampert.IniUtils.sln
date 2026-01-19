@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTrampert.IniParser", "PTrampert.IniParser\PTrampert.IniParser.csproj", "{3F7C53D5-D563-492D-B631-B97E54E76623}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTrampert.IniUtils", "PTrampert.IniUtils\PTrampert.IniUtils.csproj", "{3F7C53D5-D563-492D-B631-B97E54E76623}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTrampert.IniParser.Test", "PTrampert.IniParser.Test\PTrampert.IniParser.Test.csproj", "{E2C0E8D0-FEF1-4581-8BA2-AAE34908F54E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTrampert.IniUtils.Test", "PTrampert.IniUtils.Test\PTrampert.IniUtils.Test.csproj", "{E2C0E8D0-FEF1-4581-8BA2-AAE34908F54E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

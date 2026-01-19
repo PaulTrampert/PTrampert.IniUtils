@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace PTrampert.IniParser;
+namespace PTrampert.IniUtils;
 
 public class IniReader(IniOptions options)
 {

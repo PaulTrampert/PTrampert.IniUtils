@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PTrampert.IniParser\PTrampert.IniParser.csproj" />
+      <ProjectReference Include="..\PTrampert.IniUtils\PTrampert.IniUtils.csproj" />
     </ItemGroup>
 
 </Project>

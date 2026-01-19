@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace PTrampert.IniParser;
+namespace PTrampert.IniUtils;
 
 public class IniFile
 {

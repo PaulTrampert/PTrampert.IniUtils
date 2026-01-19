@@ -13,6 +13,6 @@ jobs:
   dotnet-library:
     uses: PaulTrampert/github-workflows/.github/workflows/dotnet-library.yml@main
     with:
-      project_name: PTrampert.IniParser
+      project_name: PTrampert.IniUtils
     secrets:
       nuget_api_key: ${{ secrets.NUGET_ORG_SECRET }}
