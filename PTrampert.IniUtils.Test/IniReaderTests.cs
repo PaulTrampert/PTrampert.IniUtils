@@ -382,7 +382,7 @@ invalid line without equals
 key2=value2";
         var reader = new StringReader(content);
         var iniReader = new IniReader(_defaultOptions);
-        
+
         // Act & Assert
         var ex = Assert.ThrowsAsync<FormatException>(async () => await iniReader.ReadAsync(reader));
         Assert.That(ex.Message, Does.Contain("Syntax error at line 2"));
@@ -555,4 +555,33 @@ key1=value2";
             try { Directory.Delete(tempDir, true); } catch { /* ignore cleanup errors */ }
         }
     }
+
+    [Test]
+    public async Task ReadAsync_CircularInclude_ThrowsInvalidOperationException()
+    {
+        // Arrange: create two files that include each other
+        var tempDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+        Directory.CreateDirectory(tempDir);
+        var aPath = Path.Combine(tempDir, "a.ini");
+        var bPath = Path.Combine(tempDir, "b.ini");
+
+        try
+        {
+            // a includes b, and b includes a
+            await File.WriteAllTextAsync(aPath, $"include={bPath}", Encoding.UTF8);
+            await File.WriteAllTextAsync(bPath, $"include={aPath}", Encoding.UTF8);
+
+            var options = new IniOptions { IncludesKey = "include" };
+            var iniReader = new IniReader(options);
+
+            // Act & Assert
+            var ex = Assert.ThrowsAsync<InvalidOperationException>(async () => await iniReader.ReadAsync(aPath));
+            Assert.That(ex.Message, Does.Contain("Circular include detected"));
+        }
+        finally
+        {
+            try { Directory.Delete(tempDir, true); } catch { /* ignore cleanup errors */ }
+        }
+    }
 }
+

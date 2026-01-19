@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -14,12 +15,22 @@ public class IniReader(IniOptions options) : IIniReader
 {
     private static readonly Regex SectionRegex = new(@"^\[([^\]]+)\]$", RegexOptions.Compiled);
     private static readonly Regex KeyValueRegex = new("^([^=]+)=(.*)$", RegexOptions.Compiled);
-
+    
+    private readonly HashSet<string> _currentFiles = new();
+    
     /// <inheritdoc/>
     public async Task<IniFile> ReadAsync(string filePath, IniSection? rootSection = null)
     {
+        var fullPath = Path.GetFullPath(filePath);
+        if (!_currentFiles.Add(fullPath))
+        {
+            throw new InvalidOperationException($"Circular include detected for file '{filePath}'");
+        }
+        
         await using var stream = File.OpenRead(filePath);
-        return await ReadAsync(stream, rootSection);
+        var result = await ReadAsync(stream, rootSection);
+        _currentFiles.Remove(fullPath);
+        return result;
     }
     
     /// <inheritdoc/>
