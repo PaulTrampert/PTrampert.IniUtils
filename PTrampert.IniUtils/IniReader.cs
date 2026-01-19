@@ -21,7 +21,7 @@ public class IniReader(IniOptions options)
     /// <param name="reader">The reader to read INI contents from.</param>
     /// <param name="rootSection">The starting current section. If not provided, the root section will be "".</param>
     /// <returns>An IniFile object representing the file contents.</returns>
-    /// <exception cref="FormatException">Thrown if a line cannot be read.</exception>
+    /// <exception cref="FormatException">Thrown when a line contains invalid INI syntax that cannot be parsed.</exception>
     public async Task<IniFile> ReadAsync(TextReader reader, IniSection? rootSection = null)
     {
         var lineNumber = 0;
