@@ -9,6 +9,8 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/PaulTrampert/PTrampert.IniUtils</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/PaulTrampert/PTrampert.IniUtils.git</RepositoryUrl>
     </PropertyGroup>
     
     <ItemGroup>
