@@ -532,7 +532,7 @@ key1=value2";
             // included file contains a simple key/value that should be merged into the main file
             await File.WriteAllTextAsync(includedPath, "incKey=incValue", Encoding.UTF8);
 
-            // main file references the include using the configured IncludesKey (relative path)
+            // main file references the include using the configured IncludesKey with an absolute path
             var mainContent = $"key1=value1\ninclude={includedPath}\nkey2=value2";
             await File.WriteAllTextAsync(mainPath, mainContent, Encoding.UTF8);
 
