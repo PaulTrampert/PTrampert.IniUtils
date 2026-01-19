@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -63,11 +62,5 @@ public class IniReader(IniOptions options)
         }
         
         return file;
-    }
-
-    private string StripComment(string line)
-    {
-        var index = line.IndexOf(options.CommentCharacter);
-        return index >= 0 ? line[..index] : line;
     }
 }
