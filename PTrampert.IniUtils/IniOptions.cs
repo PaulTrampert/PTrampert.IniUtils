@@ -1,7 +1,13 @@
 namespace PTrampert.IniUtils;
 
+/// <summary>
+/// Options for reading INI files.
+/// </summary>
 public class IniOptions
 {
+    /// <summary>
+    /// The character that indicates the start of a comment line. Default is ';'.
+    /// </summary>
     public char CommentCharacter { get; set; } = ';';
 
     /// <summary>
