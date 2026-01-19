@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -19,9 +18,8 @@ public class IniReader(IniOptions options)
         file.Sections.Add("", currentSection);
         while (await reader.ReadLineAsync() is { } line)
         {
-            line = StripComment(line);
             line = line.Trim();
-            if (string.IsNullOrEmpty(line))
+            if (string.IsNullOrEmpty(line) || line.StartsWith(options.CommentCharacter))
             {
                 continue;
             }
@@ -64,11 +62,5 @@ public class IniReader(IniOptions options)
         }
         
         return file;
-    }
-
-    private string StripComment(string line)
-    {
-        var index = line.IndexOf(options.CommentCharacter);
-        return index >= 0 ? line[..index] : line;
     }
 }
