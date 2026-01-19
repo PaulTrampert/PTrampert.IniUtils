@@ -533,7 +533,7 @@ key1=value2";
             await File.WriteAllTextAsync(includedPath, "incKey=incValue", Encoding.UTF8);
 
             // main file references the include using the configured IncludesKey (relative path)
-            var mainContent = $"key1=value1\ninclude={includedFileName}\nkey2=value2";
+            var mainContent = $"key1=value1\ninclude={includedPath}\nkey2=value2";
             await File.WriteAllTextAsync(mainPath, mainContent, Encoding.UTF8);
 
             var options = new IniOptions { IncludesKey = "include" };

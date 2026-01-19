@@ -1,3 +1,5 @@
+using System;
+
 namespace PTrampert.IniUtils;
 
 /// <summary>
@@ -20,9 +22,9 @@ public class IniOptions
     /// If specified, indicates the key used to include other INI files.
     /// Included files will be processed as if their contents appeared at the location
     /// of the include key.
-    /// </summary>
+    /// </summary>  
     public string? IncludesKey { get; set; }
-
+    
     /// <summary>
     /// Default options for windows-style INI files.
     /// * CommentCharacter: ';'
@@ -32,7 +34,7 @@ public class IniOptions
     public static IniOptions WindowsDefaults => new IniOptions
     {
         CommentCharacter = ';',
-        KeepEmptyValues = false
+        KeepEmptyValues = false,
     };
     
     /// <summary>
@@ -44,6 +46,6 @@ public class IniOptions
     public static IniOptions LinuxDefaults => new IniOptions
     {
         CommentCharacter = '#',
-        KeepEmptyValues = false
+        KeepEmptyValues = false,
     };
 }

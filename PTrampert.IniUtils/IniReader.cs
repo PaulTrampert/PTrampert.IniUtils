@@ -69,6 +69,13 @@ public class IniReader(IniOptions options) : IIniReader
                     continue;
                 }
                 
+                if (key == options.IncludesKey)
+                {
+                    var includedFile = await ReadAsync(value);
+                    file.Include(includedFile);
+                    continue;
+                }
+                
                 if (!currentSection.KeyValues.TryGetValue(key, out var values))
                 {
                     values = Array.Empty<string>();
