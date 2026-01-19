@@ -19,9 +19,8 @@ public class IniReader(IniOptions options)
         file.Sections.Add("", currentSection);
         while (await reader.ReadLineAsync() is { } line)
         {
-            line = StripComment(line);
             line = line.Trim();
-            if (string.IsNullOrEmpty(line))
+            if (string.IsNullOrEmpty(line) || line.StartsWith(options.CommentCharacter))
             {
                 continue;
             }
