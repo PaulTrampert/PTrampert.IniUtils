@@ -6,53 +6,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Antlr4 Include="IniGrammar.g4">
-        <AllowAntlr4cs>false</AllowAntlr4cs>
-        <AntlrToolJarDownloadDir>USERPROFILE/.m2/</AntlrToolJarDownloadDir>
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-        <DOptions>language=CSharp</DOptions>
-        <Encoding>UTF-8</Encoding>
-        <Error>false</Error>
-        <ForceAtn>false</ForceAtn>
-        <GAtn>false</GAtn>
-        <Generator>MSBuild:Compile</Generator>
-        <IntermediateOutputPath>obj\Debug/netstandard2.1/</IntermediateOutputPath>
-        <JavaDownloadDirectory>USERPROFILE/.jre/</JavaDownloadDirectory>
-        <JavaExec>PATH;DOWNLOAD</JavaExec>
-        <Listener>true</Listener>
-        <Log>false</Log>
-        <LongMessages>false</LongMessages>
-        <ToolType>java</ToolType>
-        <NodeExec>PATH</NodeExec>
-        <NodeDownloadDirectory>USERPROFILE/.node/</NodeDownloadDirectory>
-        <Visitor>true</Visitor>
-      </Antlr4>
-      <Antlr4 Include="IniLexer.g4">
-        <AllowAntlr4cs>false</AllowAntlr4cs>
-        <AntlrToolJarDownloadDir>USERPROFILE/.m2/</AntlrToolJarDownloadDir>
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-        <DOptions>language=CSharp</DOptions>
-        <Encoding>UTF-8</Encoding>
-        <Error>false</Error>
-        <ForceAtn>false</ForceAtn>
-        <GAtn>false</GAtn>
-        <Generator>MSBuild:Compile</Generator>
-        <IntermediateOutputPath>obj\Debug/netstandard2.1/</IntermediateOutputPath>
-        <JavaDownloadDirectory>USERPROFILE/.jre/</JavaDownloadDirectory>
-        <JavaExec>PATH;DOWNLOAD</JavaExec>
-        <Listener>true</Listener>
-        <Log>false</Log>
-        <LongMessages>false</LongMessages>
-        <ToolType>java</ToolType>
-        <NodeExec>PATH</NodeExec>
-        <NodeDownloadDirectory>USERPROFILE/.node/</NodeDownloadDirectory>
-        <Visitor>true</Visitor>
-      </Antlr4>
+      <Antlr4 Include="IniGrammar.g4"/>
+      <Antlr4 Include="IniLexer.g4"/>
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
-      <PackageReference Include="Antlr4BuildTasks" Version="12.14.0" PrivateAssets="all" IncludeAssets="build" />
+      <PackageReference Include="Antlr4BuildTasks" Version="12.11.0" PrivateAssets="all" IncludeAssets="build" />
     </ItemGroup>
 
 </Project>
