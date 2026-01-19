@@ -20,7 +20,7 @@ public class IniOptions
     /// If specified, indicates the key used to include other INI files.
     /// Included files will be processed as if their contents appeared at the location
     /// of the include key.
-    /// </summary>  
+    /// </summary>
     public string? IncludesKey { get; set; }
     
     /// <summary>
