@@ -4,16 +4,16 @@ COMMENT
     : '#' ~[\r\n]*
     ;
     
-UNQUOTED_STRING
-    : ~[=[\]\r\n\t ]+
-    ;
-    
 DQUOTED_STRING
     : '"' ( ~["\\] | '\\' . )* '"'
     ;
     
 SQUOTED_STRING
     : '\'' ( ~['\\] | '\\' . )* '\''
+    ;
+    
+UNQUOTED_STRING
+    : ~[=[\]\r\n\t ]+
     ;
     
 EQUALS
