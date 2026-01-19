@@ -552,7 +552,7 @@ key1=value2";
         finally
         {
             // Cleanup
-            try { Directory.Delete(tempDir, true); } catch { /* ignore cleanup errors */ }
+            Directory.Delete(tempDir, true);
         }
     }
 
@@ -580,7 +580,7 @@ key1=value2";
         }
         finally
         {
-            try { Directory.Delete(tempDir, true); } catch { /* ignore cleanup errors */ }
+            Directory.Delete(tempDir, true);
         }
     }
 }
