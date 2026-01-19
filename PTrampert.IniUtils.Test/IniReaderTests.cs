@@ -152,6 +152,24 @@ key2=value2";
     }
     
     [Test]
+    public async Task ReadAsync_KeyWithoutValue_KeepEmptyValuesOption_StoresKeyWithEmptyValue()
+    {
+        // Arrange
+        var content = "key1=";
+        var reader = new StringReader(content);
+        var options = new IniOptions { KeepEmptyValues = true };
+        var iniReader = new IniReader(options);
+        
+        // Act
+        var result = await iniReader.ReadAsync(reader);
+        
+        // Assert
+        var rootSection = result.Sections[""];
+        Assert.That(rootSection.KeyValues.ContainsKey("key1"), Is.True);
+        Assert.That(rootSection.KeyValues["key1"].First(), Is.EqualTo(string.Empty));
+    }
+    
+    [Test]
     public async Task ReadAsync_KeyWithEqualsInValue_ParsesCorrectly()
     {
         // Arrange
