@@ -15,6 +15,7 @@ public interface IIniReader
     /// <param name="filePath">The location of the ini file.</param>
     /// <param name="rootSection">The starting current section. If not provided, the root section will be "".</param>
     /// <returns>An IniFile object representing the file contents.</returns>
+    /// <exception cref="FormatException">Thrown when a line contains invalid INI syntax that cannot be parsed.</exception>
     Task<IniFile> ReadAsync(string filePath, IniSection? rootSection = null);
 
     /// <summary>
@@ -23,6 +24,7 @@ public interface IIniReader
     /// <param name="stream">The stream to read INI contents from.</param>
     /// <param name="rootSection">The starting current section. If not provided, the root section will be "".</param>
     /// <returns>An IniFile object representing the file contents.</returns>
+    /// <exception cref="FormatException">Thrown when a line contains invalid INI syntax that cannot be parsed.</exception>
     Task<IniFile> ReadAsync(Stream stream, IniSection? rootSection = null);
 
     /// <summary>
