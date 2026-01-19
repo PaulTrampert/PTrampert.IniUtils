@@ -10,18 +10,26 @@ namespace PTrampert.IniUtils;
 /// Reader for INI files.
 /// </summary>
 /// <param name="options">Options to use when reading an INI file.</param>
-public class IniReader(IniOptions options)
+public class IniReader(IniOptions options) : IIniReader
 {
     private static readonly Regex SectionRegex = new(@"^\[([^\]]+)\]$", RegexOptions.Compiled);
     private static readonly Regex KeyValueRegex = new("^([^=]+)=(.*)$", RegexOptions.Compiled);
 
-    /// <summary>
-    /// Create a new IniFile from the given TextReader, optionally overriding the root section.
-    /// </summary>
-    /// <param name="reader">The reader to read INI contents from.</param>
-    /// <param name="rootSection">The starting current section. If not provided, the root section will be "".</param>
-    /// <returns>An IniFile object representing the file contents.</returns>
-    /// <exception cref="FormatException">Thrown when a line contains invalid INI syntax that cannot be parsed.</exception>
+    /// <inheritdoc/>
+    public async Task<IniFile> ReadAsync(string filePath, IniSection? rootSection = null)
+    {
+        await using var stream = File.OpenRead(filePath);
+        return await ReadAsync(stream, rootSection);
+    }
+    
+    /// <inheritdoc/>
+    public async Task<IniFile> ReadAsync(Stream stream, IniSection? rootSection = null)
+    {
+        var reader = new StreamReader(stream);
+        return await ReadAsync(reader, rootSection);
+    }
+    
+    /// <inheritdoc/>
     public async Task<IniFile> ReadAsync(TextReader reader, IniSection? rootSection = null)
     {
         var lineNumber = 0;

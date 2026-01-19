@@ -1,3 +1,6 @@
+using System.IO;
+using System.Text;
+
 namespace PTrampert.IniUtils.Test;
 
 [TestFixture]
@@ -470,5 +473,48 @@ key1=value2";
         // Assert
         Assert.That(result.Sections["Section1"].KeyValues["key1"].First(), Is.EqualTo("value1"));
         Assert.That(result.Sections["Section2"].KeyValues["key1"].First(), Is.EqualTo("value2"));
+    }
+
+    [Test]
+    public async Task ReadAsync_FilePath_ParsesCorrectly()
+    {
+        // Arrange
+        var content = "key1=value1";
+        var tempPath = Path.GetTempFileName();
+        try
+        {
+            await File.WriteAllTextAsync(tempPath, content, Encoding.UTF8);
+            var iniReader = new IniReader(_defaultOptions);
+
+            // Act
+            var result = await iniReader.ReadAsync(tempPath);
+
+            // Assert
+            var rootSection = result.Sections[""];
+            Assert.That(rootSection.KeyValues.ContainsKey("key1"), Is.True);
+            Assert.That(rootSection.KeyValues["key1"].First(), Is.EqualTo("value1"));
+        }
+        finally
+        {
+            File.Delete(tempPath);
+        }
+    }
+
+    [Test]
+    public async Task ReadAsync_Stream_ParsesCorrectly()
+    {
+        // Arrange
+        var content = "key1=value1";
+        var bytes = Encoding.UTF8.GetBytes(content);
+        using var ms = new MemoryStream(bytes);
+        var iniReader = new IniReader(_defaultOptions);
+
+        // Act
+        var result = await iniReader.ReadAsync(ms);
+
+        // Assert
+        var rootSection = result.Sections[""];
+        Assert.That(rootSection.KeyValues.ContainsKey("key1"), Is.True);
+        Assert.That(rootSection.KeyValues["key1"].First(), Is.EqualTo("value1"));
     }
 }
