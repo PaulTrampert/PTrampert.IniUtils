@@ -11,6 +11,7 @@ PTrampert.IniUtils focuses on a simple, predictable parser with an async API and
 - Configurable comment character and option to keep empty values.
 - Simple in-memory model: sections (including a root section) with key -> values mapping.
 - Small surface area — no external dependencies required by the library itself.
+- Automatic includes resolution (e.g. `Include = otherfile.ini`).
 
 ## Install
 
@@ -83,12 +84,3 @@ Contributions, bug reports, and pull requests are welcome. Please include tests 
 ## License
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
-
----
-
-If you'd like, I can also:
-- Add a short example that shows parsing a more complex INI file with sections and comments,
-- Add a minimal sample console app that demonstrates the library in action, or
-- Prepare a NuGet packaging guide (csproj changes and `dotnet pack` steps).
-
-Tell me which you'd like next.
