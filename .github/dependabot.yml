@@ -1,0 +1,27 @@
+# Dependabot configuration
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "(PATCH)"
+      include: "scope"
+
+  - package-ecosystem: "nuget" # See documentation for possible values
+    directories:
+      - / # Location of package manifests
+    schedule:
+      interval: "weekly"
+    groups:
+      csharp-deps:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "(PATCH)"
+      include: "scope"
