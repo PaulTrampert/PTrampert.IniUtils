@@ -91,7 +91,17 @@ public class IniReader(IniOptions options) : IIniReader
                 
                 if (key == options.IncludesKey)
                 {
-                    var includedFile = await ReadAsync(value);
+                    var includePath = value;
+                    if (!Path.IsPathRooted(includePath) && _fileStack.Count > 0)
+                    {
+                        var baseDirectory = Path.GetDirectoryName(_fileStack.Peek());
+                        if (!string.IsNullOrEmpty(baseDirectory))
+                        {
+                            includePath = Path.Combine(baseDirectory, includePath);
+                        }
+                    }
+
+                    var includedFile = await ReadAsync(includePath);
                     file.Include(includedFile);
                     continue;
                 }
