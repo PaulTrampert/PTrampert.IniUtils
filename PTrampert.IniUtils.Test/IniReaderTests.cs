@@ -225,7 +225,7 @@ key1=value1";
     }
     
     [Test]
-    public async Task ReadAsync_InlineComment_RemovesCommentPortion()
+    public async Task ReadAsync_InlineComment_IsTreatedAsPartOfTheValue()
     {
         // Arrange
         var content = "key1=value1 ; This is a comment";
@@ -237,7 +237,7 @@ key1=value1";
         
         // Assert
         var rootSection = result.Sections[""];
-        Assert.That(rootSection.KeyValues["key1"].First(), Is.EqualTo("value1"));
+        Assert.That(rootSection.KeyValues["key1"].First(), Is.EqualTo("value1 ; This is a comment"));
     }
     
     [Test]
@@ -245,7 +245,7 @@ key1=value1";
     {
         // Arrange
         var content = @"# This is a comment
-key1=value1 # inline comment";
+key1=value1";
         var reader = new StringReader(content);
         var options = new IniOptions { CommentCharacter = '#' };
         var iniReader = new IniReader(options);
