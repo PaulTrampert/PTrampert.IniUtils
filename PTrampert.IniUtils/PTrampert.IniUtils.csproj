@@ -7,4 +7,13 @@
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
+      <PackageReference Include="Antlr4BuildTasks" Version="12.14.0" PrivateAssets="all" IncludeAssets="build" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Antlr4 Include="**/*.g4" />
+    </ItemGroup>
 </Project>
