@@ -15,4 +15,16 @@ public class IniOptions
     /// lines like "key=" will result in the key "key" with an empty string as its value.
     /// </summary>
     public bool KeepEmptyValues { get; set; }
+    
+    public static IniOptions WindowsDefaults => new IniOptions
+    {
+        CommentCharacter = ';',
+        KeepEmptyValues = false
+    };
+    
+    public static IniOptions LinuxDefaults => new IniOptions
+    {
+        CommentCharacter = '#',
+        KeepEmptyValues = false
+    };
 }
