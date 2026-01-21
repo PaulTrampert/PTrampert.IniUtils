@@ -15,6 +15,12 @@ public class IniOptions
     /// lines like "key=" will result in the key "key" with an empty string as its value.
     /// </summary>
     public bool KeepEmptyValues { get; set; }
+    
+    /// <summary>
+    /// If true, allows keys without an equals sign to be treated as keys with empty values.
+    /// For example, a line like "key" will be treated as "key=".
+    /// </summary>
+    public bool AllowKeyWithoutEquals { get; set; }
 
     /// <summary>
     /// If specified, indicates the key used to include other INI files.

@@ -583,5 +583,68 @@ key1=value2";
             Directory.Delete(tempDir, true);
         }
     }
-}
 
+    [Test]
+    public async Task ReadAsync_KeyWithoutEquals_AllowsKeyWhenOptionEnabled_AndKeepEmptyValuesTrue()
+    {
+        // Arrange
+        var content = "flag";
+        var reader = new StringReader(content);
+        var options = new IniOptions { AllowKeyWithoutEquals = true, KeepEmptyValues = true };
+        var iniReader = new IniReader(options);
+
+        // Act
+        var result = await iniReader.ReadAsync(reader);
+
+        // Assert
+        var rootSection = result.Sections[""];
+        Assert.That(rootSection.KeyValues.ContainsKey("flag"), Is.True);
+        Assert.That(rootSection.KeyValues["flag"].First(), Is.EqualTo(string.Empty));
+    }
+
+    [Test]
+    public async Task ReadAsync_KeyWithoutEquals_DoesNotStoreWhenKeepEmptyValuesFalse()
+    {
+        // Arrange
+        var content = "flag";
+        var reader = new StringReader(content);
+        var options = new IniOptions { AllowKeyWithoutEquals = true, KeepEmptyValues = false };
+        var iniReader = new IniReader(options);
+
+        // Act
+        var result = await iniReader.ReadAsync(reader);
+
+        // Assert
+        var rootSection = result.Sections[""];
+        Assert.That(rootSection.KeyValues.ContainsKey("flag"), Is.False);
+    }
+
+    [Test]
+    public async Task ReadAsync_EmptyIncludePath_SkipsIncludeDirective()
+    {
+        // Arrange
+        var content = @"key1=value1
+include
+key2=value2";
+        var reader = new StringReader(content);
+        var options = new IniOptions 
+        { 
+            AllowKeyWithoutEquals = true, 
+            KeepEmptyValues = true,
+            IncludesKey = "include" 
+        };
+        var iniReader = new IniReader(options);
+
+        // Act
+        var result = await iniReader.ReadAsync(reader);
+
+        // Assert - should successfully parse without trying to include an empty path
+        var rootSection = result.Sections[""];
+        Assert.That(rootSection.KeyValues.ContainsKey("key1"), Is.True);
+        Assert.That(rootSection.KeyValues["key1"].First(), Is.EqualTo("value1"));
+        Assert.That(rootSection.KeyValues.ContainsKey("key2"), Is.True);
+        Assert.That(rootSection.KeyValues["key2"].First(), Is.EqualTo("value2"));
+        // The empty include should be skipped, not stored as a key
+        Assert.That(rootSection.KeyValues.ContainsKey("include"), Is.False);
+    }
+}
