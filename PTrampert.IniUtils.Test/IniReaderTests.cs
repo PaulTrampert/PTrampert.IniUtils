@@ -583,5 +583,39 @@ key1=value2";
             Directory.Delete(tempDir, true);
         }
     }
-}
 
+    [Test]
+    public async Task ReadAsync_KeyWithoutEquals_AllowsKeyWhenOptionEnabled_AndKeepEmptyValuesTrue()
+    {
+        // Arrange
+        var content = "flag";
+        var reader = new StringReader(content);
+        var options = new IniOptions { AllowKeyWithoutEquals = true, KeepEmptyValues = true };
+        var iniReader = new IniReader(options);
+
+        // Act
+        var result = await iniReader.ReadAsync(reader);
+
+        // Assert
+        var rootSection = result.Sections[""];
+        Assert.That(rootSection.KeyValues.ContainsKey("flag"), Is.True);
+        Assert.That(rootSection.KeyValues["flag"].First(), Is.EqualTo(string.Empty));
+    }
+
+    [Test]
+    public async Task ReadAsync_KeyWithoutEquals_DoesNotStoreWhenKeepEmptyValuesFalse()
+    {
+        // Arrange
+        var content = "flag";
+        var reader = new StringReader(content);
+        var options = new IniOptions { AllowKeyWithoutEquals = true, KeepEmptyValues = false };
+        var iniReader = new IniReader(options);
+
+        // Act
+        var result = await iniReader.ReadAsync(reader);
+
+        // Assert
+        var rootSection = result.Sections[""];
+        Assert.That(rootSection.KeyValues.ContainsKey("flag"), Is.False);
+    }
+}

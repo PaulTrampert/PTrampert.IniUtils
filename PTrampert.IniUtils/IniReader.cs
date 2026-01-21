@@ -116,6 +116,45 @@ public class IniReader(IniOptions options) : IIniReader
                 
                 continue;
             }
+
+            // If no '=' was found, and the option allows it, treat the whole line as a key with an empty value.
+            if (options.AllowKeyWithoutEquals && !line.Contains('='))
+            {
+                var key = line.Trim();
+                var value = string.Empty;
+
+                if (string.IsNullOrEmpty(value) && !options.KeepEmptyValues)
+                {
+                    continue;
+                }
+
+                if (key == options.IncludesKey)
+                {
+                    var includePath = value;
+                    if (!Path.IsPathRooted(includePath) && _fileStack.Count > 0)
+                    {
+                        var baseDirectory = Path.GetDirectoryName(_fileStack.Peek());
+                        if (!string.IsNullOrEmpty(baseDirectory))
+                        {
+                            includePath = Path.Combine(baseDirectory, includePath);
+                        }
+                    }
+
+                    var includedFile = await ReadAsync(includePath);
+                    file.Include(includedFile);
+                    continue;
+                }
+
+                if (!currentSection.KeyValues.TryGetValue(key, out var values))
+                {
+                    values = Array.Empty<string>();
+                    currentSection.KeyValues.Add(key, values);
+                }
+
+                currentSection.KeyValues[key] = values.Append(value);
+
+                continue;
+            }
             throw new IniSyntaxException(lineNumber, line, _fileStack.Count > 0 ? _fileStack.Peek() : null);
         }
         
