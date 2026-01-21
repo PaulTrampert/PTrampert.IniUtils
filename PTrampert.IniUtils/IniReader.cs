@@ -18,7 +18,7 @@ public class IniReader(IniOptions options) : IIniReader
     
     private readonly HashSet<string> _currentFiles = new();
     private readonly Stack<string> _fileStack = new();
-    
+
     /// <inheritdoc/>
     public async Task<IniFile> ReadAsync(string filePath, IniSection? rootSection = null)
     {
@@ -84,36 +84,7 @@ public class IniReader(IniOptions options) : IIniReader
                 var key = keyValueMatch.Groups[1].Value.Trim();
                 var value = keyValueMatch.Groups[2].Value.Trim();
 
-                if (string.IsNullOrEmpty(value) && !options.KeepEmptyValues)
-                {
-                    continue;
-                }
-                
-                if (key == options.IncludesKey)
-                {
-                    var includePath = value;
-                    if (!Path.IsPathRooted(includePath) && _fileStack.Count > 0)
-                    {
-                        var baseDirectory = Path.GetDirectoryName(_fileStack.Peek());
-                        if (!string.IsNullOrEmpty(baseDirectory))
-                        {
-                            includePath = Path.Combine(baseDirectory, includePath);
-                        }
-                    }
-
-                    var includedFile = await ReadAsync(includePath);
-                    file.Include(includedFile);
-                    continue;
-                }
-                
-                if (!currentSection.KeyValues.TryGetValue(key, out var values))
-                {
-                    values = Array.Empty<string>();
-                    currentSection.KeyValues.Add(key, values);
-                }
-
-                currentSection.KeyValues[key] = values.Append(value);
-                
+                await ProcessKeyValueAsync(file, currentSection, key, value);
                 continue;
             }
 
@@ -123,35 +94,7 @@ public class IniReader(IniOptions options) : IIniReader
                 var key = line.Trim();
                 var value = string.Empty;
 
-                if (string.IsNullOrEmpty(value) && !options.KeepEmptyValues)
-                {
-                    continue;
-                }
-
-                if (key == options.IncludesKey)
-                {
-                    var includePath = value;
-                    if (!Path.IsPathRooted(includePath) && _fileStack.Count > 0)
-                    {
-                        var baseDirectory = Path.GetDirectoryName(_fileStack.Peek());
-                        if (!string.IsNullOrEmpty(baseDirectory))
-                        {
-                            includePath = Path.Combine(baseDirectory, includePath);
-                        }
-                    }
-
-                    var includedFile = await ReadAsync(includePath);
-                    file.Include(includedFile);
-                    continue;
-                }
-
-                if (!currentSection.KeyValues.TryGetValue(key, out var values))
-                {
-                    values = Array.Empty<string>();
-                    currentSection.KeyValues.Add(key, values);
-                }
-
-                currentSection.KeyValues[key] = values.Append(value);
+                await ProcessKeyValueAsync(file, currentSection, key, value);
 
                 continue;
             }
@@ -159,5 +102,40 @@ public class IniReader(IniOptions options) : IIniReader
         }
         
         return file;
+    }
+
+    // Helper: process a key + value (handles KeepEmptyValues, IncludesKey resolution, and adding values)
+    private async Task ProcessKeyValueAsync(IniFile file, IniSection currentSection, string key, string value)
+    {
+        // value is expected to be trimmed by caller
+        if (string.IsNullOrEmpty(value) && !options.KeepEmptyValues)
+        {
+            return; // skip storing empty values
+        }
+
+        if (key == options.IncludesKey)
+        {
+            var includePath = value;
+            if (!Path.IsPathRooted(includePath) && _fileStack.Count > 0)
+            {
+                var baseDirectory = Path.GetDirectoryName(_fileStack.Peek());
+                if (!string.IsNullOrEmpty(baseDirectory))
+                {
+                    includePath = Path.Combine(baseDirectory, includePath);
+                }
+            }
+
+            var includedFile = await ReadAsync(includePath);
+            file.Include(includedFile);
+            return;
+        }
+
+        if (!currentSection.KeyValues.TryGetValue(key, out var values))
+        {
+            values = Array.Empty<string>();
+            currentSection.KeyValues.Add(key, values);
+        }
+
+        currentSection.KeyValues[key] = values.Append(value);
     }
 }
