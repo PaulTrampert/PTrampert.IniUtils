@@ -402,7 +402,7 @@ key2=value2";
         var result = await iniReader.ReadAsync(reader, customRoot);
         
         // Assert
-        Assert.That(result.Sections[""], Is.SameAs(customRoot));
+        Assert.That(result.Sections[customRoot.Name], Is.SameAs(customRoot));
         Assert.That(customRoot.KeyValues.ContainsKey("key1"), Is.True);
     }
     
@@ -548,6 +548,49 @@ key1=value2";
             Assert.That(root.KeyValues.ContainsKey("incKey"), Is.True, "Included file's key should be present");
             Assert.That(root.KeyValues.ContainsKey("key2"), Is.True);
             Assert.That(root.KeyValues["incKey"].First(), Is.EqualTo("incValue"));
+        }
+        finally
+        {
+            // Cleanup
+            Directory.Delete(tempDir, true);
+        }
+    }
+
+    [Test]
+    public async Task ReadAsync_IncludeInNamedSection_AppliesToThatSection()
+    {
+        // Arrange: create a temporary directory with main and included INI files
+        var tempDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+        Directory.CreateDirectory(tempDir);
+        var includedFileName = "included.ini";
+        var includedPath = Path.Combine(tempDir, includedFileName);
+        var mainPath = Path.Combine(tempDir, "main.ini");
+
+        try
+        {
+            // included file contains a simple key/value that should be merged into the section
+            await File.WriteAllTextAsync(includedPath, "incKey=incValue", Encoding.UTF8);
+
+            // main file has a named section and the include occurs inside that section
+            var mainContent = $"[Section1]\nkey1=value1\ninclude={includedPath}\nkey2=value2";
+            await File.WriteAllTextAsync(mainPath, mainContent, Encoding.UTF8);
+
+            var options = new IniOptions { IncludesKey = "include" };
+            var iniReader = new IniReader(options);
+
+            // Act
+            var result = await iniReader.ReadAsync(mainPath);
+
+            // Assert: the included key should be present in Section1 and not in the root section
+            Assert.That(result.Sections.ContainsKey("Section1"), Is.True);
+            var section = result.Sections["Section1"];
+            Assert.That(section.KeyValues.ContainsKey("key1"), Is.True);
+            Assert.That(section.KeyValues.ContainsKey("incKey"), Is.True, "Included file's key should be present in the named section");
+            Assert.That(section.KeyValues.ContainsKey("key2"), Is.True);
+            Assert.That(section.KeyValues["incKey"].First(), Is.EqualTo("incValue"));
+
+            var root = result.Sections[""];
+            Assert.That(root.KeyValues.ContainsKey("incKey"), Is.False, "Included key should not be in the root section");
         }
         finally
         {

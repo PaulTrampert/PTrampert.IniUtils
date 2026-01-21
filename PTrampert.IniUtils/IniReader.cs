@@ -56,7 +56,7 @@ public class IniReader(IniOptions options) : IIniReader
         var lineNumber = 0;
         var file = new IniFile();
         var currentSection = rootSection ?? new IniSection { Name = "" };
-        file.Sections.Add("", currentSection);
+        file.Sections.Add(currentSection.Name, currentSection);
         while (await reader.ReadLineAsync() is { } line)
         {
             lineNumber++;
@@ -100,7 +100,7 @@ public class IniReader(IniOptions options) : IIniReader
                 }
             }
 
-            var includedFile = await ReadAsync(includePath);
+            var includedFile = await ReadAsync(includePath, currentSection);
             file.Include(includedFile);
             return;
         }
