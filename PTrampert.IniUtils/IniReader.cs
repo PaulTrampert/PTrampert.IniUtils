@@ -84,6 +84,12 @@ public class IniReader(IniOptions options) : IIniReader
 
         if (key == options.IncludesKey)
         {
+            // Skip empty include paths - they are not valid
+            if (string.IsNullOrEmpty(value))
+            {
+                return;
+            }
+
             var includePath = value;
             if (!Path.IsPathRooted(includePath) && _fileStack.Count > 0)
             {
