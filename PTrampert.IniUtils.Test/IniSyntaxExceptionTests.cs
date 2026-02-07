@@ -103,22 +103,46 @@ public class IniSyntaxExceptionTests
     }
 
     [Test]
-    public void IniSyntaxException_PropertiesCanBeSetAfterConstruction()
+    public void IniSyntaxException_MessageWithDiagnosticInfo_SetsAllProperties()
     {
         // Arrange
-        var ex = new IniSyntaxException("Test message");
+        const string customMessage = "Custom syntax error";
         const int lineNumber = 15;
         const string lineContent = "test_content";
         const string filePath = "test.ini";
         
         // Act
-        ex.LineNumber = lineNumber;
-        ex.LineContent = lineContent;
-        ex.FilePath = filePath;
+        var ex = new IniSyntaxException(customMessage, lineNumber, lineContent, filePath);
         
         // Assert
         using (Assert.EnterMultipleScope())
         {
+            Assert.That(ex.Message, Is.EqualTo(customMessage));
+            Assert.That(ex.LineNumber, Is.EqualTo(lineNumber));
+            Assert.That(ex.LineContent, Is.EqualTo(lineContent));
+            Assert.That(ex.FilePath, Is.EqualTo(filePath));
+            Assert.That(ex.InnerException, Is.Null);
+        }
+    }
+
+    [Test]
+    public void IniSyntaxException_MessageWithInnerExceptionAndDiagnosticInfo_SetsAllProperties()
+    {
+        // Arrange
+        const string customMessage = "Custom syntax error with inner exception";
+        var innerException = new FormatException("Format error");
+        const int lineNumber = 20;
+        const string lineContent = "invalid_content";
+        const string filePath = "config.ini";
+        
+        // Act
+        var ex = new IniSyntaxException(customMessage, innerException, lineNumber, lineContent, filePath);
+        
+        // Assert
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(ex.Message, Is.EqualTo(customMessage));
+            Assert.That(ex.InnerException, Is.SameAs(innerException));
             Assert.That(ex.LineNumber, Is.EqualTo(lineNumber));
             Assert.That(ex.LineContent, Is.EqualTo(lineContent));
             Assert.That(ex.FilePath, Is.EqualTo(filePath));
