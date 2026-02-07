@@ -25,16 +25,22 @@ public class IniSyntaxException : Exception
     /// <summary>
     /// Create a new IniSyntaxException with default values.
     /// </summary>
-    public IniSyntaxException() : this(0, string.Empty, null)
+    public IniSyntaxException()
     {
+        LineNumber = 0;
+        LineContent = string.Empty;
+        FilePath = null;
     }
     
     /// <summary>
     /// Create a new IniSyntaxException with a custom message.
     /// </summary>
     /// <param name="message">The error message.</param>
-    public IniSyntaxException(string message) : this(message, 0, string.Empty, null)
+    public IniSyntaxException(string message) : base(message)
     {
+        LineNumber = 0;
+        LineContent = string.Empty;
+        FilePath = null;
     }
     
     /// <summary>
@@ -43,8 +49,11 @@ public class IniSyntaxException : Exception
     /// <param name="message">The error message.</param>
     /// <param name="innerException">The inner exception.</param>
     public IniSyntaxException(string message, Exception innerException) 
-        : this(message, innerException, 0, string.Empty, null)
+        : base(message, innerException)
     {
+        LineNumber = 0;
+        LineContent = string.Empty;
+        FilePath = null;
     }
     
     /// <summary>
