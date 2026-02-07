@@ -8,6 +8,21 @@ namespace PTrampert.IniUtils;
 public class IniSyntaxException : Exception
 {
     /// <summary>
+    /// The line number the syntax exception occurred at.
+    /// </summary>
+    public int LineNumber { get; }
+    
+    /// <summary>
+    /// The content of the line that caused the syntax exception.
+    /// </summary>
+    public string LineContent { get; }
+    
+    /// <summary>
+    /// The file path the syntax exception occurred in, if applicable.
+    /// </summary>
+    public string? FilePath { get; }
+    
+    /// <summary>
     /// Create a new IniSyntaxException.
     /// </summary>
     /// <param name="lineNumber">Line number the error occurred at.</param>
@@ -16,6 +31,9 @@ public class IniSyntaxException : Exception
     public IniSyntaxException(int lineNumber, string lineContent, string? filePath)
         : base($"Syntax error{FileMessageClause(filePath)} at line {lineNumber}: '{lineContent}'")
     {
+        LineNumber = lineNumber;
+        LineContent = lineContent;
+        FilePath = filePath;
     }
 
     private static string FileMessageClause(string? filePath)
