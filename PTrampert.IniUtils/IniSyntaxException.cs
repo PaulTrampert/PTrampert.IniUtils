@@ -10,17 +10,41 @@ public class IniSyntaxException : Exception
     /// <summary>
     /// The line number the syntax exception occurred at.
     /// </summary>
-    public int LineNumber { get; }
+    public int LineNumber { get; set; }
     
     /// <summary>
     /// The content of the line that caused the syntax exception.
     /// </summary>
-    public string LineContent { get; }
+    public string LineContent { get; set; } = string.Empty;
     
     /// <summary>
     /// The file path the syntax exception occurred in, if applicable.
     /// </summary>
-    public string? FilePath { get; }
+    public string? FilePath { get; set; }
+    
+    /// <summary>
+    /// Create a new IniSyntaxException with default values.
+    /// </summary>
+    public IniSyntaxException()
+    {
+    }
+    
+    /// <summary>
+    /// Create a new IniSyntaxException with a custom message.
+    /// </summary>
+    /// <param name="message">The error message.</param>
+    public IniSyntaxException(string message) : base(message)
+    {
+    }
+    
+    /// <summary>
+    /// Create a new IniSyntaxException with a custom message and inner exception.
+    /// </summary>
+    /// <param name="message">The error message.</param>
+    /// <param name="innerException">The inner exception.</param>
+    public IniSyntaxException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
     
     /// <summary>
     /// Create a new IniSyntaxException.
