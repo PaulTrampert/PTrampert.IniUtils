@@ -384,7 +384,7 @@ key2=value2";
         var iniReader = new IniReader(_defaultOptions);
 
         // Act & Assert
-        var ex = Assert.ThrowsAsync<IniSyntaxException>(async () => await iniReader.ReadAsync(reader));
+        var ex = await Assert.ThrowsAsync<IniSyntaxException>(async () => await iniReader.ReadAsync(reader));
         Assert.That(ex.Message, Does.Contain("Syntax error at line 2"));
         Assert.That(ex.Message, Does.Contain("invalid line without equals"));
     }
@@ -618,7 +618,7 @@ key1=value2";
             var iniReader = new IniReader(options);
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<InvalidOperationException>(async () => await iniReader.ReadAsync(aPath));
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(async () => await iniReader.ReadAsync(aPath));
             Assert.That(ex.Message, Does.Contain("Circular include detected"));
         }
         finally
