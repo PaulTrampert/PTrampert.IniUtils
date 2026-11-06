@@ -6,3 +6,6 @@ riderModule.iml
 *copilot*
 *.user
 *.suo
+
+# Claude Code agent worktrees
+.claude/worktrees/
